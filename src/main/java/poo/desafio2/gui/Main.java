@@ -4,14 +4,22 @@ import java.awt.Dimension;
 import javax.swing.*;
 import poo.desafio2.util.LoggerManager;
 
+
+
 public class Main {
+    
+    
+    
     public static void main(String[] args) {
+
+        // Configurar el look and feel
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
         
+        // Inicializar logger
         try {
             LoggerManager.initialize();
             LoggerManager.getLogger(Main.class).info("✅ Sistema de Mediateca iniciado");
@@ -19,6 +27,7 @@ public class Main {
             System.err.println("Error inicializando logger: " + e.getMessage());
         }
         
+        // Ejecutar en el hilo de eventos de Swing
         SwingUtilities.invokeLater(() -> {
             crearYMostrarInterfazPrincipal();
         });
@@ -39,26 +48,32 @@ public class Main {
         JButton btnListar = new JButton("📋 Listar Materiales");
         JButton btnBuscar = new JButton("🔍 Buscar Material");
         
+        // Estilo a los botones
         for (JButton boton : new JButton[]{btnAgregar, btnModificar, btnListar, btnBuscar}) {
             boton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
             boton.setMaximumSize(new Dimension(200, 40));
             boton.setFocusPainted(false);
         }
         
+        // ✅ ACTUALIZADO: Conectar con las ventanas reales de Persona 3
         btnAgregar.addActionListener(e -> {
+            LoggerManager.getLogger(Main.class).info("Abriendo VentanaAgregarMaterial");
             new VentanaAgregarMaterial().setVisible(true);
         });
         
         btnModificar.addActionListener(e -> {
+            LoggerManager.getLogger(Main.class).info("Abriendo VentanaModificarMaterial");
             new VentanaModificarMaterial().setVisible(true);
         });
         
         btnListar.addActionListener(e -> {
-            JOptionPane.showMessageDialog(ventanaPrincipal, "Función en desarrollo por Persona 3");
+            LoggerManager.getLogger(Main.class).info("Abriendo VentanaListarMateriales");
+            new VentanaListarMateriales().setVisible(true);
         });
         
         btnBuscar.addActionListener(e -> {
-            JOptionPane.showMessageDialog(ventanaPrincipal, "Función en desarrollo por Persona 3");
+            LoggerManager.getLogger(Main.class).info("Abriendo VentanaBuscarMaterial");
+            new VentanaBuscarMaterial().setVisible(true);
         });
         
         panel.add(btnAgregar);
@@ -71,5 +86,7 @@ public class Main {
         
         ventanaPrincipal.add(panel);
         ventanaPrincipal.setVisible(true);
+        
+        LoggerManager.getLogger(Main.class).info("Interfaz principal mostrada - Sistema listo");
     }
 }

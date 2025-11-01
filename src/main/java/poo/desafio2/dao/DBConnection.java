@@ -1,34 +1,29 @@
 package poo.desafio2.dao;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class DBConnection {
-    private static Properties properties = new Properties();
     
     static {
-        try (InputStream input = DBConnection.class.getClassLoader().getResourceAsStream("database.properties")) {
-            if (input == null) {
-                throw new RuntimeException("Unable to find database.properties");
-            }
-            properties.load(input);
-            
-            // CORRECCIÓN: Driver fijo en lugar de leer de properties
+        try {
+            // Cargar el driver de MySQL
             Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (IOException | ClassNotFoundException ex) {
-            throw new RuntimeException("Error loading database properties", ex);
+            System.out.println("✅ Driver MySQL cargado correctamente");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Error cargando driver MySQL", e);
         }
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(
-            properties.getProperty("db.url"),
-            properties.getProperty("db.username"),
-            properties.getProperty("db.password")
-        );
+        // ✅ CONFIGURACIÓN DIRECTA EN EL CÓDIGO
+        String url = "jdbc:mysql://localhost:3306/mediateca?serverTimezone=UTC";
+        String username = "root";
+        String password = "";  // Normalmente vacío en XAMPP
+        
+        System.out.println("🔗 Conectando a: " + url);
+        
+        return DriverManager.getConnection(url, username, password);
     }
 }
